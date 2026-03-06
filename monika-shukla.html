@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Monika Shukla — Mobile App Development Leader</title>
+<meta name="description" content="Technical Manager specializing in Flutter, Mobile App Architecture, and Scalable FinTech Solutions."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────────── */
+:root {
+  --c-white:     #ffffff;
+  --c-snow:      #fafafa;
+  --c-fog:       #f2f2f4;
+  --c-silver:    #e0e0e6;
+  --c-stone:     #c0c0cc;
+  --c-slate:     #8a8a9a;
+  --c-graphite:  #4a4a58;
+  --c-charcoal:  #1c1c28;
+  --c-midnight:  #0b0b18;
+  --c-ink:       #07070f;
+  --c-blue:      #1a56db;
+  --c-blue-soft: #e8f0fe;
+  --c-blue-glow: rgba(26,86,219,.12);
+
+  --r-xs: 8px;
+  --r-sm: 14px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 40px;
+
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+  --ease-in-out:   cubic-bezier(.4,0,.2,1);
+}
+
+/* ─────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--c-white);
+  color:var(--c-charcoal);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  cursor:default;
+}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+button{border:none;background:none;font:inherit;cursor:pointer}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+.cursor{
+  position:fixed;width:10px;height:10px;
+  background:var(--c-blue);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .3s,height .3s,opacity .3s;
+  mix-blend-mode:multiply;
+}
+.cursor-ring{
+  position:fixed;width:40px;height:40px;
+  border:1.5px solid rgba(26,86,219,.4);
+  border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform .12s var(--ease-out-expo),width .4s,height .4s;
+}
+
+/* ─────────────────────────────────────────────
+   SCROLLBAR
+───────────────────────────────────────────── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--c-silver);border-radius:2px}
+
+/* ─────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  transition:background .4s,backdrop-filter .4s,border-color .4s;
+}
+nav.scrolled{
+  background:rgba(255,255,255,.88);
+  backdrop-filter:saturate(180%) blur(24px);
+  -webkit-backdrop-filter:saturate(180%) blur(24px);
+  border-bottom:1px solid rgba(0,0,0,.07);
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;font-weight:600;
+  color:var(--c-midnight);
+  letter-spacing:-.01em;
+}
+.nav-logo span{color:var(--c-blue)}
+.nav-links{
+  display:flex;align-items:center;gap:38px;
+}
+.nav-links a{
+  font-size:13px;font-weight:400;
+  color:var(--c-graphite);letter-spacing:.01em;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--c-midnight)}
+.nav-cta{
+  background:var(--c-midnight);color:var(--c-white);
+  padding:9px 22px;border-radius:980px;
+  font-size:13px;font-weight:500;
+  letter-spacing:.01em;
+  transition:background .25s,transform .2s;
+  display:inline-block;
+}
+.nav-cta:hover{background:var(--c-blue);transform:scale(1.04)}
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  padding:4px;cursor:pointer;
+}
+.hamburger span{
+  width:22px;height:1.5px;background:var(--c-charcoal);
+  border-radius:2px;transition:transform .3s,opacity .3s;
+  display:block;
+}
+.mobile-menu{
+  display:none;position:fixed;top:56px;left:0;right:0;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(0,0,0,.07);
+  padding:24px 32px 32px;z-index:199;
+  transform:translateY(-10px);opacity:0;
+  transition:transform .35s var(--ease-out-expo),opacity .3s;
+  pointer-events:none;
+}
+.mobile-menu.open{transform:translateY(0);opacity:1;pointer-events:all}
+.mobile-menu a{
+  display:block;font-size:18px;font-weight:300;
+  color:var(--c-charcoal);padding:12px 0;
+  border-bottom:1px solid var(--c-silver);
+}
+.mobile-menu a:last-of-type{border:none}
+
+/* ─────────────────────────────────────────────
+   REVEAL SYSTEM
+───────────────────────────────────────────── */
+.reveal{
+  opacity:0;transform:translateY(48px);
+  transition:opacity .9s var(--ease-out-expo),
+             transform .9s var(--ease-out-expo);
+}
+.reveal.in{opacity:1;transform:none}
+.reveal-scale{
+  opacity:0;transform:scale(.94);
+  transition:opacity .9s var(--ease-out-expo),
+             transform .9s var(--ease-out-expo);
+}
+.reveal-scale.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}
+.d2{transition-delay:.16s}
+.d3{transition-delay:.24s}
+.d4{transition-delay:.32s}
+.d5{transition-delay:.40s}
+.d6{transition-delay:.48s}
+
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+.hero{
+  min-height:100vh;
+  background:var(--c-ink);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:100px 24px 80px;
+  position:relative;overflow:hidden;
+}
+.hero-orb{
+  position:absolute;border-radius:50%;
+  filter:blur(100px);pointer-events:none;
+}
+.orb-1{
+  width:700px;height:500px;
+  top:-80px;left:50%;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(26,86,219,.35) 0%,transparent 70%);
+  animation:orbDrift 14s ease-in-out infinite alternate;
+}
+.orb-2{
+  width:400px;height:400px;
+  bottom:10%;right:-5%;
+  background:radial-gradient(ellipse,rgba(100,140,255,.18) 0%,transparent 70%);
+  animation:orbDrift 18s ease-in-out infinite alternate-reverse;
+}
+.orb-3{
+  width:300px;height:300px;
+  bottom:20%;left:5%;
+  background:radial-gradient(ellipse,rgba(26,86,219,.1) 0%,transparent 70%);
+  animation:orbDrift 22s ease-in-out infinite alternate;
+}
+@keyframes orbDrift{
+  0%{transform:translate(0,0)}
+  100%{transform:translate(30px,25px)}
+}
+.hero-grain{
+  position:absolute;inset:0;z-index:1;
+  opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:300px 300px;
+}
+.hero-content{
+  position:relative;z-index:3;
+  max-width:920px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(255,255,255,.45);
+  margin-bottom:40px;
+  animation:heroFadeUp .8s var(--ease-out-expo) .1s both;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';display:block;height:1px;width:28px;
+  background:rgba(255,255,255,.25);
+}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(52px,8.5vw,108px);
+  font-weight:300;line-height:1.0;
+  color:var(--c-white);
+  letter-spacing:-.04em;
+  margin-bottom:10px;
+  animation:heroFadeUp .9s var(--ease-out-expo) .22s both;
+}
+.hero-title em{
+  font-style:italic;font-weight:300;
+  background:linear-gradient(135deg,#7aaeff 0%,#a8c8ff 50%,#c8d8ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-title-line2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(52px,8.5vw,108px);
+  font-weight:300;line-height:1.0;
+  color:rgba(255,255,255,.18);
+  letter-spacing:-.04em;
+  margin-bottom:40px;
+  animation:heroFadeUp .9s var(--ease-out-expo) .30s both;
+}
+.hero-sub{
+  font-size:clamp(15px,2vw,19px);
+  font-weight:300;
+  color:rgba(255,255,255,.48);
+  line-height:1.7;
+  max-width:560px;margin:0 auto 52px;
+  animation:heroFadeUp .9s var(--ease-out-expo) .40s both;
+}
+.hero-btns{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  animation:heroFadeUp .9s var(--ease-out-expo) .52s both;
+}
+.btn-hero-primary{
+  background:var(--c-white);color:var(--c-midnight);
+  padding:15px 38px;border-radius:980px;
+  font-size:14px;font-weight:500;
+  transition:transform .3s var(--ease-out-expo),box-shadow .3s;
+  display:inline-block;
+}
+.btn-hero-primary:hover{
+  transform:scale(1.05);
+  box-shadow:0 12px 40px rgba(255,255,255,.15);
+}
+.btn-hero-ghost{
+  border:1.5px solid rgba(255,255,255,.25);
+  color:rgba(255,255,255,.75);
+  padding:14px 38px;border-radius:980px;
+  font-size:14px;font-weight:400;
+  transition:border-color .3s,color .3s,transform .3s;
+  display:inline-block;
+}
+.btn-hero-ghost:hover{
+  border-color:rgba(255,255,255,.7);
+  color:var(--c-white);
+  transform:scale(1.03);
+}
+.hero-scroll-hint{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:rgba(255,255,255,.25);font-size:10px;font-weight:400;
+  letter-spacing:.15em;text-transform:uppercase;z-index:3;
+  animation:heroFadeUp .9s var(--ease-out-expo) .8s both;
+}
+.scroll-line{
+  width:1px;height:36px;
+  background:linear-gradient(to bottom,rgba(255,255,255,.3),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{opacity:.3;transform:scaleY(1)}
+  50%{opacity:.8;transform:scaleY(1.15)}
+}
+
+/* floating devices */
+.hero-devices{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  display:flex;gap:20px;align-items:flex-end;z-index:2;
+  animation:heroFadeUp 1s var(--ease-out-expo) .65s both;
+  pointer-events:none;
+}
+.device{
+  border-radius:36px;
+  border:1.5px solid rgba(255,255,255,.1);
+  position:relative;overflow:hidden;
+  box-shadow:
+    0 50px 100px rgba(0,0,0,.7),
+    0 0 0 .5px rgba(255,255,255,.04) inset,
+    0 2px 0 rgba(255,255,255,.08) inset;
+}
+.device-sm{width:130px;height:248px;animation:floatA 7s ease-in-out infinite}
+.device-md{width:155px;height:302px;animation:floatB 8s ease-in-out infinite}
+.device-lg{width:145px;height:278px;animation:floatC 9s ease-in-out infinite}
+@keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+@keyframes floatC{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.device-inner{
+  position:absolute;inset:8px;border-radius:28px;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.d-app-1{background:linear-gradient(160deg,#0d1f5c,#1a3fa8,#0d1535)}
+.d-app-2{background:linear-gradient(160deg,#0c1a3a,#183080,#091228)}
+.d-app-3{background:linear-gradient(160deg,#101c42,#1d3599,#0b1430)}
+.d-ui{padding:14px 12px;display:flex;flex-direction:column;gap:9px;flex:1}
+.d-notch{
+  width:60px;height:5px;background:rgba(0,0,0,.6);
+  border-radius:3px;margin:0 auto 8px;
+}
+.d-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.12)}
+.d-bar.w90{width:90%}.d-bar.w70{width:70%}.d-bar.w55{width:55%}.d-bar.w40{width:40%}
+.d-card-row{display:flex;gap:7px}
+.d-card{
+  flex:1;border-radius:10px;height:52px;
+  background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.d-list{display:flex;flex-direction:column;gap:5px}
+.d-li{
+  background:rgba(255,255,255,.06);
+  border-radius:7px;height:24px;
+  display:flex;align-items:center;gap:7px;padding:0 8px;
+}
+.d-dot{width:6px;height:6px;border-radius:50%;background:rgba(120,160,255,.7);flex-shrink:0}
+.d-thin{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.1)}
+.d-big-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:400;color:rgba(255,255,255,.7);
+  letter-spacing:-.02em;padding:8px 12px 4px;
+}
+.d-chart{
+  flex:1;position:relative;margin:0 10px 10px;
+  background:rgba(255,255,255,.04);border-radius:8px;
+  overflow:hidden;
+}
+.d-chart-line{
+  position:absolute;bottom:0;left:0;right:0;height:100%;
+}
+.d-chart-line svg{width:100%;height:100%}
+.d-badge{
+  margin:0 10px;padding:6px 10px;
+  background:rgba(26,86,219,.35);border-radius:8px;
+  font-size:10px;color:rgba(200,220,255,.8);font-weight:500;
+  letter-spacing:.05em;
+}
+
+@keyframes heroFadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:none}
+}
+@keyframes heroFadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:none}
+}
+
+/* ─────────────────────────────────────────────
+   TRUST STRIP
+───────────────────────────────────────────── */
+.trust{
+  background:var(--c-midnight);
+  padding:28px 24px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.trust-inner{
+  max-width:1000px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
+  gap:0;flex-wrap:wrap;
+}
+.trust-item{
+  display:flex;align-items:center;gap:10px;
+  padding:0 36px;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.trust-item:last-child{border-right:none}
+.trust-icon{font-size:16px;opacity:.6}
+.trust-text{
+  font-size:12px;font-weight:400;
+  color:rgba(255,255,255,.45);
+  letter-spacing:.04em;
+  white-space:nowrap;
+}
+
+/* ─────────────────────────────────────────────
+   SHARED SECTION STYLES
+───────────────────────────────────────────── */
+.section{padding:140px 24px}
+.section-sm{padding:100px 24px}
+.container{max-width:1060px;margin:0 auto}
+.container-wide{max-width:1200px;margin:0 auto}
+.label{
+  font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--c-blue);margin-bottom:20px;display:block;
+}
+.h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(38px,5.5vw,64px);
+  font-weight:400;letter-spacing:-.03em;
+  line-height:1.08;color:var(--c-midnight);
+}
+.h2 em{font-style:italic;font-weight:300}
+.h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,3.5vw,42px);
+  font-weight:400;letter-spacing:-.025em;
+  line-height:1.15;color:var(--c-midnight);
+}
+.body-lg{
+  font-size:18px;font-weight:300;
+  color:var(--c-slate);line-height:1.75;
+  max-width:580px;
+}
+.body-md{
+  font-size:16px;font-weight:300;
+  color:var(--c-graphite);line-height:1.7;
+}
+.divider{
+  width:48px;height:1px;
+  background:linear-gradient(to right,var(--c-blue),transparent);
+  margin:28px 0;
+}
+
+/* ─────────────────────────────────────────────
+   STORY / ABOUT
+───────────────────────────────────────────── */
+.story{background:var(--c-white)}
+.story-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:center;
+}
+.story-visual{
+  position:relative;
+}
+.story-card{
+  background:var(--c-midnight);
+  border-radius:32px;
+  padding:52px 44px;
+  position:relative;overflow:hidden;
+  box-shadow:0 60px 120px rgba(0,0,0,.12);
+}
+.story-card-glow{
+  position:absolute;
+  width:350px;height:350px;
+  top:-80px;right:-60px;
+  background:radial-gradient(ellipse,rgba(26,86,219,.35) 0%,transparent 70%);
+  pointer-events:none;
+}
+.story-initial{
+  font-family:'Cormorant Garamond',serif;
+  font-size:160px;font-weight:600;line-height:1;
+  color:rgba(255,255,255,.04);
+  position:absolute;top:20px;right:24px;
+  letter-spacing:-.05em;
+  pointer-events:none;
+  user-select:none;
+}
+.story-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;font-weight:400;
+  color:var(--c-white);letter-spacing:-.02em;
+  position:relative;z-index:1;margin-bottom:8px;
+}
+.story-role{
+  font-size:12px;font-weight:400;letter-spacing:.1em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+  margin-bottom:40px;position:relative;z-index:1;
+}
+.story-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;position:relative;z-index:1;
+}
+.story-stat{
+  background:rgba(255,255,255,.05);
+  border-radius:16px;padding:20px;
+  border:1px solid rgba(255,255,255,.07);
+  transition:background .3s;
+}
+.story-stat:hover{background:rgba(255,255,255,.08)}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:40px;font-weight:400;
+  color:var(--c-white);letter-spacing:-.03em;
+  line-height:1;margin-bottom:4px;
+}
+.stat-num .plus{font-size:24px;color:var(--c-blue);vertical-align:super}
+.stat-label{font-size:11px;color:rgba(255,255,255,.35);font-weight:400;letter-spacing:.04em}
+.story-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:36px;position:relative;z-index:1}
+.story-tag{
+  background:rgba(26,86,219,.2);
+  border:1px solid rgba(26,86,219,.3);
+  color:rgba(160,190,255,.8);
+  font-size:11px;font-weight:400;letter-spacing:.05em;
+  padding:5px 14px;border-radius:980px;
+}
+.story-text h2{margin-bottom:24px}
+.story-text p{margin-bottom:20px}
+.story-text p:last-child{margin-bottom:0}
+.quote-mark{
+  font-family:'Cormorant Garamond',serif;
+  font-size:80px;color:var(--c-blue-soft);
+  line-height:.5;display:block;margin-bottom:16px;
+}
+
+/* ─────────────────────────────────────────────
+   CAPABILITIES — product feature rows
+───────────────────────────────────────────── */
+.capabilities{background:var(--c-snow)}
+.cap-intro{max-width:680px;margin-bottom:100px}
+.cap-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  padding:80px 0;
+  border-top:1px solid var(--c-silver);
+}
+.cap-row:last-child{border-bottom:1px solid var(--c-silver)}
+.cap-row.reverse .cap-visual{order:-1}
+.cap-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:72px;font-weight:300;
+  color:var(--c-silver);letter-spacing:-.05em;
+  line-height:1;margin-bottom:8px;
+}
+.cap-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;font-weight:400;letter-spacing:-.025em;
+  color:var(--c-midnight);margin-bottom:16px;line-height:1.1;
+}
+.cap-desc{
+  font-size:16px;font-weight:300;
+  color:var(--c-graphite);line-height:1.75;
+  margin-bottom:24px;
+}
+.cap-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}
+.cap-tag{
+  background:var(--c-fog);
+  border:1px solid var(--c-silver);
+  color:var(--c-graphite);
+  font-size:11px;font-weight:400;
+  padding:4px 12px;border-radius:980px;
+  letter-spacing:.03em;
+}
+.cap-visual-box{
+  border-radius:24px;
+  aspect-ratio:4/3;
+  position:relative;overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,.09);
+}
+.cv-flutter{background:linear-gradient(135deg,#0a1a4a 0%,#1a3fa8 60%,#0d1535 100%)}
+.cv-arch{background:linear-gradient(135deg,#080e28 0%,#0d2060 60%,#050a18 100%)}
+.cv-fintech{background:linear-gradient(135deg,#04100a 0%,#0a3020 60%,#02080d 100%)}
+.cv-ux{background:linear-gradient(135deg,#1a0a2a 0%,#3a1060 60%,#100818 100%)}
+.cv-cross{background:linear-gradient(135deg,#1a0a0a 0%,#481020 60%,#0f0608 100%)}
+.cv-ent{background:linear-gradient(135deg,#0a0e1a 0%,#141f48 60%,#060810 100%)}
+.cv-inner{
+  position:absolute;inset:20px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.cv-bar-row{display:flex;gap:8px}
+.cv-bar{height:7px;border-radius:4px;background:rgba(255,255,255,.1)}
+.cv-bar.b80{width:80%}.cv-bar.b60{width:60%}.cv-bar.b45{width:45%}
+.cv-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+.cv-card{
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.cv-bottom{display:flex;gap:8px;flex-direction:column}
+
+/* ─────────────────────────────────────────────
+   APP CATEGORIES
+───────────────────────────────────────────── */
+.categories{background:var(--c-white)}
+.cat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;margin-top:72px;
+}
+.cat-card{
+  background:var(--c-fog);
+  border-radius:20px;
+  padding:28px 24px;
+  border:1px solid transparent;
+  transition:border-color .3s,transform .35s var(--ease-out-expo),box-shadow .3s;
+  cursor:default;
+}
+.cat-card:hover{
+  border-color:rgba(26,86,219,.18);
+  transform:translateY(-8px);
+  box-shadow:0 24px 60px rgba(26,86,219,.07);
+}
+.cat-icon{
+  font-size:26px;margin-bottom:14px;
+  display:block;
+}
+.cat-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;
+  color:var(--c-midnight);
+  letter-spacing:-.01em;margin-bottom:6px;
+}
+.cat-sub{
+  font-size:12px;font-weight:300;
+  color:var(--c-slate);line-height:1.5;
+}
+
+/* ─────────────────────────────────────────────
+   FEATURED WORK
+───────────────────────────────────────────── */
+.work{background:var(--c-midnight)}
+.work .label{color:rgba(120,170,255,.6)}
+.work .h2{color:var(--c-white)}
+.work .body-lg{color:rgba(255,255,255,.4)}
+.work-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;margin-top:72px;
+}
+.work-card{
+  border-radius:28px;
+  overflow:hidden;
+  position:relative;
+  transition:transform .4s var(--ease-out-expo);
+  cursor:default;
+  border:1px solid rgba(255,255,255,.07);
+}
+.work-card:hover{transform:scale(1.02)}
+.work-card:first-child{grid-column:span 2}
+.wc-bg{
+  aspect-ratio:16/7;
+  position:relative;overflow:hidden;
+}
+.wc-bg-tall{aspect-ratio:5/4}
+.wbg-1{background:linear-gradient(135deg,#0a1840,#1a3fa8,#0a1235)}
+.wbg-2{background:linear-gradient(135deg,#051a10,#0a4020,#020d08)}
+.wbg-3{background:linear-gradient(135deg,#1a0830,#3a1060,#0d0418)}
+.wbg-4{background:linear-gradient(135deg,#1a1005,#503010,#0d0802)}
+.wbg-5{background:linear-gradient(135deg,#050a1a,#0a1840,#020508)}
+.wc-mockup{
+  position:absolute;bottom:-10px;right:40px;
+  display:flex;gap:12px;align-items:flex-end;
+}
+.wc-mockup-wide{
+  right:80px;
+}
+.wm{
+  border-radius:20px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  overflow:hidden;
+}
+.wm-sm{width:90px;height:170px}
+.wm-md{width:110px;height:210px}
+.wm-lg{width:130px;height:250px}
+.wm-inner{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  padding:10px 8px;gap:6px;
+}
+.wm-bar{height:4px;border-radius:3px;background:rgba(255,255,255,.15)}
+.wm-bar.s7{width:70%}.wm-bar.s5{width:50%}.wm-bar.s9{width:90%}.wm-bar.s4{width:40%}
+.wm-spacer{flex:1}
+.wm-btn{
+  height:20px;border-radius:10px;
+  background:rgba(26,86,219,.5);
+  margin:0 4px;
+}
+.wc-info{
+  padding:28px 32px;
+  background:rgba(255,255,255,.03);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.wc-tag{
+  display:inline-block;
+  background:rgba(26,86,219,.25);
+  border:1px solid rgba(26,86,219,.4);
+  color:rgba(140,180,255,.8);
+  font-size:10px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 12px;border-radius:980px;
+  margin-bottom:14px;
+}
+.wc-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:400;
+  color:var(--c-white);letter-spacing:-.02em;
+  margin-bottom:8px;
+}
+.wc-desc{
+  font-size:14px;font-weight:300;
+  color:rgba(255,255,255,.4);
+  line-height:1.6;
+}
+.wc-meta{
+  display:flex;gap:20px;margin-top:14px;
+  flex-wrap:wrap;
+}
+.wc-meta-item{
+  font-size:11px;font-weight:400;
+  color:rgba(255,255,255,.3);
+  display:flex;align-items:center;gap:5px;
+}
+
+/* ─────────────────────────────────────────────
+   PHILOSOPHY
+───────────────────────────────────────────── */
+.philosophy{background:var(--c-fog)}
+.phil-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin-top:72px;
+}
+.phil-card{
+  background:var(--c-white);
+  border-radius:24px;
+  padding:40px 32px;
+  border:1px solid var(--c-silver);
+  transition:transform .35s var(--ease-out-expo),box-shadow .35s;
+}
+.phil-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.06);
+}
+.phil-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:48px;font-weight:300;
+  color:var(--c-silver);letter-spacing:-.04em;
+  line-height:1;margin-bottom:20px;
+}
+.phil-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;
+  color:var(--c-midnight);
+  letter-spacing:-.01em;margin-bottom:12px;
+}
+.phil-desc{
+  font-size:14px;font-weight:300;
+  color:var(--c-graphite);
+  line-height:1.7;
+}
+
+/* ─────────────────────────────────────────────
+   PROCESS
+───────────────────────────────────────────── */
+.process{background:var(--c-white)}
+.process-track{
+  display:flex;gap:0;margin-top:80px;
+  position:relative;
+}
+.process-track::before{
+  content:'';
+  position:absolute;top:28px;left:28px;right:28px;
+  height:1px;background:var(--c-silver);z-index:0;
+}
+.process-step{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:0 12px;position:relative;z-index:1;
+}
+.ps-circle{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--c-white);
+  border:1.5px solid var(--c-silver);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:20px;
+  transition:border-color .3s,box-shadow .3s,transform .3s;
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.process-step:hover .ps-circle{
+  border-color:var(--c-blue);
+  box-shadow:0 8px 24px rgba(26,86,219,.15);
+  transform:scale(1.1);
+}
+.ps-num{
+  font-size:10px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--c-blue);
+  margin-bottom:6px;
+}
+.ps-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;
+  color:var(--c-midnight);letter-spacing:-.01em;
+  margin-bottom:8px;
+}
+.ps-desc{
+  font-size:12px;font-weight:300;
+  color:var(--c-slate);line-height:1.6;
+}
+
+/* ─────────────────────────────────────────────
+   TESTIMONIALS
+───────────────────────────────────────────── */
+.testimonials{background:var(--c-snow)}
+.testi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin-top:72px;
+}
+.testi-card{
+  background:var(--c-white);
+  border-radius:24px;
+  padding:40px 32px;
+  border:1px solid var(--c-silver);
+  position:relative;
+  transition:transform .35s var(--ease-out-expo),box-shadow .35s;
+}
+.testi-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 24px 60px rgba(0,0,0,.07);
+}
+.testi-stars{
+  display:flex;gap:3px;margin-bottom:20px;
+}
+.star{color:#fbbf24;font-size:13px}
+.testi-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;font-style:italic;
+  color:var(--c-charcoal);
+  line-height:1.55;margin-bottom:28px;
+  letter-spacing:-.01em;
+}
+.testi-author{
+  display:flex;align-items:center;gap:14px;
+  padding-top:20px;
+  border-top:1px solid var(--c-silver);
+}
+.testi-avatar{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--c-white);
+  flex-shrink:0;
+}
+.av-1{background:linear-gradient(135deg,#1a3fa8,#0a1840)}
+.av-2{background:linear-gradient(135deg,#0a3020,#041a10)}
+.av-3{background:linear-gradient(135deg,#3a1060,#1a0830)}
+.testi-name{
+  font-size:14px;font-weight:500;color:var(--c-midnight);
+  margin-bottom:2px;
+}
+.testi-role{font-size:12px;font-weight:300;color:var(--c-slate)}
+
+/* ─────────────────────────────────────────────
+   CTA
+───────────────────────────────────────────── */
+.cta-section{
+  background:var(--c-midnight);
+  padding:180px 24px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-glow{
+  position:absolute;
+  width:700px;height:600px;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,rgba(26,86,219,.25) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-content{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.cta-label{
+  font-size:11px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(255,255,255,.35);
+  margin-bottom:32px;display:block;
+}
+.cta-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(44px,7vw,80px);
+  font-weight:300;letter-spacing:-.04em;
+  line-height:1.05;color:var(--c-white);
+  margin-bottom:24px;
+}
+.cta-title em{font-style:italic;color:rgba(140,185,255,.8)}
+.cta-sub{
+  font-size:17px;font-weight:300;
+  color:rgba(255,255,255,.4);
+  line-height:1.75;max-width:500px;margin:0 auto 56px;
+}
+.cta-btns{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+}
+.btn-cta-primary{
+  background:var(--c-white);color:var(--c-midnight);
+  padding:16px 42px;border-radius:980px;
+  font-size:15px;font-weight:500;
+  transition:transform .3s,box-shadow .3s;
+  display:inline-block;
+}
+.btn-cta-primary:hover{
+  transform:scale(1.05);
+  box-shadow:0 12px 40px rgba(255,255,255,.12);
+}
+.btn-cta-ghost{
+  border:1.5px solid rgba(255,255,255,.22);
+  color:rgba(255,255,255,.7);
+  padding:15px 42px;border-radius:980px;
+  font-size:15px;font-weight:400;
+  transition:border-color .3s,color .3s,transform .3s;
+  display:inline-block;
+}
+.btn-cta-ghost:hover{
+  border-color:rgba(255,255,255,.6);
+  color:var(--c-white);
+  transform:scale(1.03);
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+footer{
+  background:var(--c-ink);
+  padding:60px 24px 40px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer-inner{
+  max-width:1060px;margin:0 auto;
+  display:grid;grid-template-columns:1fr auto auto auto;
+  gap:40px;align-items:start;
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;
+  color:rgba(255,255,255,.8);margin-bottom:8px;
+}
+.footer-tagline{
+  font-size:12px;font-weight:300;
+  color:rgba(255,255,255,.25);letter-spacing:.04em;
+}
+.footer-col-title{
+  font-size:10px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(255,255,255,.25);
+  margin-bottom:16px;
+}
+.footer-col a,.footer-col span{
+  display:block;
+  font-size:13px;font-weight:300;
+  color:rgba(255,255,255,.45);
+  margin-bottom:10px;
+  transition:color .2s;
+}
+.footer-col a:hover{color:rgba(255,255,255,.8)}
+.footer-bottom{
+  max-width:1060px;margin:48px auto 0;
+  padding-top:28px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-copy{
+  font-size:11px;font-weight:300;
+  color:rgba(255,255,255,.2);letter-spacing:.04em;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{display:block}
+  .hero-devices{display:none}
+  .hero{padding-bottom:80px}
+  .trust-item{padding:0 20px}
+  .story-grid,.about-grid{grid-template-columns:1fr;gap:50px}
+  .story-card{padding:36px 28px}
+  .story-text{order:-1}
+  .cap-row{grid-template-columns:1fr;gap:40px}
+  .cap-row.reverse .cap-visual{order:0}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .work-grid{grid-template-columns:1fr}
+  .work-card:first-child{grid-column:span 1}
+  .phil-grid{grid-template-columns:1fr}
+  .process-track{flex-direction:column;gap:20px}
+  .process-track::before{display:none}
+  .testi-grid{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr;gap:32px}
+}
+@media(max-width:600px){
+  .trust-inner{flex-direction:column;gap:16px}
+  .trust-item{border-right:none;padding:8px 0}
+  .cat-grid{grid-template-columns:1fr 1fr}
+  .hero-title{font-size:46px}
+  .hero-title-line2{font-size:46px}
+  .section{padding:90px 24px}
+  .cta-section{padding:120px 24px}
+  .story-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#">Monika<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#story">About</a></li>
+    <li><a href="#capabilities">Expertise</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#process">Process</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Start a Project</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#story" onclick="toggleMenu()">About</a>
+  <a href="#capabilities" onclick="toggleMenu()">Expertise</a>
+  <a href="#work" onclick="toggleMenu()">Work</a>
+  <a href="#process" onclick="toggleMenu()">Process</a>
+  <a href="#contact" onclick="toggleMenu()">Start a Project</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Technical Manager &nbsp;·&nbsp; Flutter &nbsp;·&nbsp; Mobile Architecture</div>
+    <h1 class="hero-title">Mobile Experiences,</h1>
+    <h1 class="hero-title"><em>Designed to Scale.</em></h1>
+    <p class="hero-sub">
+      Monika Shukla builds elegant, high-performance mobile products with a focus on architecture, usability, and lasting business impact.
+    </p>
+    <div class="hero-btns">
+      <a href="#work" class="btn-hero-primary">View Work</a>
+      <a href="#contact" class="btn-hero-ghost">Start a Conversation</a>
+    </div>
+  </div>
+
+  <!-- Device mockups -->
+  <div class="hero-devices">
+    <div class="device device-sm">
+      <div class="device-inner d-app-1">
+        <div class="d-ui">
+          <div class="d-notch"></div>
+          <div class="d-bar w90"></div>
+          <div class="d-bar w60"></div>
+          <div class="d-big-num">₹24,890</div>
+          <div class="d-chart">
+            <div class="d-chart-line">
+              <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+                <polyline points="0,40 15,30 30,35 45,20 60,25 75,10 90,15 100,8"
+                  fill="none" stroke="rgba(79,131,255,.5)" stroke-width="2"/>
+                <polygon points="0,40 15,30 30,35 45,20 60,25 75,10 90,15 100,8 100,50 0,50"
+                  fill="rgba(26,86,219,.15)"/>
+              </svg>
+            </div>
+          </div>
+          <div class="d-badge">+12.4% this month</div>
+        </div>
+      </div>
+    </div>
+    <div class="device device-md">
+      <div class="device-inner d-app-2">
+        <div class="d-ui">
+          <div class="d-notch"></div>
+          <div class="d-bar w70"></div>
+          <div class="d-bar w40"></div>
+          <div class="d-card-row">
+            <div class="d-card">🏦</div>
+            <div class="d-card">📊</div>
+          </div>
+          <div class="d-card-row">
+            <div class="d-card">💳</div>
+            <div class="d-card">📱</div>
+          </div>
+          <div class="d-list">
+            <div class="d-li"><div class="d-dot"></div><div class="d-thin"></div></div>
+            <div class="d-li"><div class="d-dot"></div><div class="d-thin"></div></div>
+            <div class="d-li"><div class="d-dot"></div><div class="d-thin"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="device device-lg">
+      <div class="device-inner d-app-3">
+        <div class="d-ui">
+          <div class="d-notch"></div>
+          <div class="d-bar w55"></div>
+          <div class="d-bar w80"></div>
+          <div class="d-card-row">
+            <div class="d-card">🌿</div>
+          </div>
+          <div class="d-list">
+            <div class="d-li"><div class="d-dot"></div><div class="d-thin"></div></div>
+            <div class="d-li"><div class="d-dot"></div><div class="d-thin"></div></div>
+          </div>
+          <div class="d-badge">All systems healthy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TRUST STRIP
+═══════════════════════════════════════════ -->
+<div class="trust">
+  <div class="trust-inner">
+    <div class="trust-item reveal d1">
+      <span class="trust-icon">🏛</span>
+      <span class="trust-text">Technical Manager</span>
+    </div>
+    <div class="trust-item reveal d2">
+      <span class="trust-icon">📱</span>
+      <span class="trust-text">Mobile App Development</span>
+    </div>
+    <div class="trust-item reveal d3">
+      <span class="trust-icon">⚡</span>
+      <span class="trust-text">Flutter Specialist</span>
+    </div>
+    <div class="trust-item reveal d4">
+      <span class="trust-icon">🏦</span>
+      <span class="trust-text">FinTech Solutions</span>
+    </div>
+    <div class="trust-item reveal d5">
+      <span class="trust-icon">📍</span>
+      <span class="trust-text">Pune, India</span>
+    </div>
+    <div class="trust-item reveal d6">
+      <span class="trust-icon">🏢</span>
+      <span class="trust-text">Mahindra Finance</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     STORY
+═══════════════════════════════════════════ -->
+<section class="story section" id="story">
+  <div class="container">
+    <div class="story-grid">
+
+      <div class="story-visual reveal reveal-scale">
+        <div class="story-card">
+          <div class="story-card-glow"></div>
+          <div class="story-initial">M</div>
+          <div class="story-name">Monika Shukla</div>
+          <div class="story-role">Technical Manager · Mobile App Development</div>
+          <div class="story-stats">
+            <div class="story-stat">
+              <div class="stat-num">8<span class="plus">+</span></div>
+              <div class="stat-label">Years in Mobile</div>
+            </div>
+            <div class="story-stat">
+              <div class="stat-num">40<span class="plus">+</span></div>
+              <div class="stat-label">Apps Delivered</div>
+            </div>
+            <div class="story-stat">
+              <div class="stat-num">12<span class="plus">+</span></div>
+              <div class="stat-label">FinTech Products</div>
+            </div>
+            <div class="story-stat">
+              <div class="stat-num">99<span class="plus">%</span></div>
+              <div class="stat-label">Uptime Standards</div>
+            </div>
+          </div>
+          <div class="story-tags">
+            <span class="story-tag">Flutter</span>
+            <span class="story-tag">iOS & Android</span>
+            <span class="story-tag">Mobile Architecture</span>
+            <span class="story-tag">Digital Transformation</span>
+            <span class="story-tag">FinTech</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-text">
+        <span class="label reveal">The Story</span>
+        <h2 class="h2 reveal d1">Building apps that <em>outlast the moment.</em></h2>
+        <div class="divider reveal d2"></div>
+        <p class="body-lg reveal d2">
+          Monika Shukla is a Technical Manager at Mahindra Finance, where she leads the architecture and delivery of mobile products that serve millions of users across India's financial sector.
+        </p>
+        <p class="body-md reveal d3" style="margin-top:20px;color:var(--c-graphite)">
+          With a deep specialization in Flutter and cross-platform development, she brings both engineering precision and product thinking to every initiative — ensuring apps aren't just functional, but elegant, scalable, and genuinely loved by users.
+        </p>
+        <p class="body-md reveal d4" style="margin-top:16px;color:var(--c-graphite)">
+          Her work spans complex FinTech systems, enterprise-grade mobile platforms, and digital transformation programs — always guided by the belief that great mobile experiences should feel effortless, regardless of the complexity underneath.
+        </p>
+        <div style="margin-top:36px" class="reveal d5">
+          <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--c-blue);letter-spacing:.01em;border-bottom:1px solid rgba(26,86,219,.3);padding-bottom:2px;transition:gap .25s">
+            Start a conversation &nbsp;→
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CAPABILITIES
+═══════════════════════════════════════════ -->
+<section class="capabilities section" id="capabilities">
+  <div class="container-wide">
+    <div class="cap-intro">
+      <span class="label reveal">Expertise</span>
+      <h2 class="h2 reveal d1">Capabilities built for <em>real-world scale.</em></h2>
+      <p class="body-lg reveal d2" style="margin-top:20px">
+        Each discipline is practiced with the depth and deliberation of someone who has shipped, iterated, and scaled across demanding production environments.
+      </p>
+    </div>
+
+    <!-- Row 1 -->
+    <div class="cap-row">
+      <div class="cap-text reveal">
+        <div class="cap-num">01</div>
+        <h3 class="cap-title">Flutter Engineering</h3>
+        <p class="cap-desc">
+          Building performant, pixel-perfect applications using Flutter's reactive framework — from complex custom widgets to state management architectures that hold up under real-world load. One codebase. Native feel. Zero compromise.
+        </p>
+        <div class="cap-tags">
+          <span class="cap-tag">Flutter SDK</span>
+          <span class="cap-tag">Dart</span>
+          <span class="cap-tag">BLoC / Riverpod</span>
+          <span class="cap-tag">Custom Widgets</span>
+          <span class="cap-tag">Platform Channels</span>
+        </div>
+      </div>
+      <div class="cap-visual reveal d2">
+        <div class="cap-visual-box cv-flutter">
+          <div class="cv-inner">
+            <div class="cv-bar-row">
+              <div class="cv-bar b80"></div>
+            </div>
+            <div class="cv-bar-row">
+              <div class="cv-bar b60"></div>
+            </div>
+            <div class="cv-cards">
+              <div class="cv-card">⚡</div>
+              <div class="cv-card">🎨</div>
+              <div class="cv-card">🔧</div>
+              <div class="cv-card">📐</div>
+            </div>
+            <div class="cv-bottom">
+              <div class="cv-bar b45"></div>
+              <div class="cv-bar b80"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="cap-row reverse">
+      <div class="cap-text reveal">
+        <div class="cap-num">02</div>
+        <h3 class="cap-title">Scalable App Architecture</h3>
+        <p class="cap-desc">
+          Designing mobile backends and client-side architectures that handle growth without breaking — clean separation of concerns, modular codebases, and patterns that keep teams moving fast without accumulating technical debt.
+        </p>
+        <div class="cap-tags">
+          <span class="cap-tag">Clean Architecture</span>
+          <span class="cap-tag">MVVM / MVC</span>
+          <span class="cap-tag">Microservices</span>
+          <span class="cap-tag">API Design</span>
+          <span class="cap-tag">Offline-First</span>
+        </div>
+      </div>
+      <div class="cap-visual reveal d2">
+        <div class="cap-visual-box cv-arch">
+          <div class="cv-inner">
+            <div class="cv-cards">
+              <div class="cv-card">🏗</div>
+              <div class="cv-card">🔗</div>
+              <div class="cv-card">📦</div>
+              <div class="cv-card">🧩</div>
+            </div>
+            <div class="cv-bottom">
+              <div class="cv-bar b80"></div>
+              <div class="cv-bar b60"></div>
+              <div class="cv-bar b45"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="cap-row">
+      <div class="cap-text reveal">
+        <div class="cap-num">03</div>
+        <h3 class="cap-title">FinTech Mobile Systems</h3>
+        <p class="cap-desc">
+          Deep experience building financial-grade mobile applications — secure payment flows, KYC integrations, transaction engines, and regulatory compliance built into the product foundation from day one.
+        </p>
+        <div class="cap-tags">
+          <span class="cap-tag">Payment Gateways</span>
+          <span class="cap-tag">KYC / AML</span>
+          <span class="cap-tag">Secure Storage</span>
+          <span class="cap-tag">Biometric Auth</span>
+          <span class="cap-tag">Real-time Data</span>
+        </div>
+      </div>
+      <div class="cap-visual reveal d2">
+        <div class="cap-visual-box cv-fintech">
+          <div class="cv-inner">
+            <div class="cv-bar-row">
+              <div class="cv-bar b60"></div>
+            </div>
+            <div class="cv-cards">
+              <div class="cv-card">🏦</div>
+              <div class="cv-card">🔐</div>
+              <div class="cv-card">💳</div>
+              <div class="cv-card">📊</div>
+            </div>
+            <div class="cv-bottom">
+              <div class="cv-bar b80"></div>
+              <div class="cv-bar b45"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="cap-row reverse">
+      <div class="cap-text reveal">
+        <div class="cap-num">04</div>
+        <h3 class="cap-title">Mobile UX Excellence</h3>
+        <p class="cap-desc">
+          Translating complex functionality into experiences that feel natural and obvious. Every interaction, transition, and micro-detail is considered — because how something feels is inseparable from how it works.
+        </p>
+        <div class="cap-tags">
+          <span class="cap-tag">UX Strategy</span>
+          <span class="cap-tag">Interaction Design</span>
+          <span class="cap-tag">Accessibility</span>
+          <span class="cap-tag">Prototyping</span>
+          <span class="cap-tag">User Testing</span>
+        </div>
+      </div>
+      <div class="cap-visual reveal d2">
+        <div class="cap-visual-box cv-ux">
+          <div class="cv-inner">
+            <div class="cv-cards">
+              <div class="cv-card">✦</div>
+              <div class="cv-card">🎯</div>
+              <div class="cv-card">👆</div>
+              <div class="cv-card">♿</div>
+            </div>
+            <div class="cv-bottom">
+              <div class="cv-bar b45"></div>
+              <div class="cv-bar b80"></div>
+              <div class="cv-bar b60"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     APP CATEGORIES
+═══════════════════════════════════════════ -->
+<section class="categories section" id="categories">
+  <div class="container">
+    <span class="label reveal">What She Builds</span>
+    <h2 class="h2 reveal d1" style="max-width:600px">Every kind of app, <em>built with intention.</em></h2>
+    <p class="body-lg reveal d2" style="margin-top:20px">
+      Whatever your product domain, the same principles apply: performance, elegance, and architecture that grows with you.
+    </p>
+
+    <div class="cat-grid">
+      <div class="cat-card reveal d1">
+        <span class="cat-icon">🏦</span>
+        <div class="cat-name">FinTech Apps</div>
+        <div class="cat-sub">Wallets, lending, payments & investment platforms</div>
+      </div>
+      <div class="cat-card reveal d2">
+        <span class="cat-icon">🛍</span>
+        <div class="cat-name">E-commerce Apps</div>
+        <div class="cat-sub">Shopping experiences built for conversion and scale</div>
+      </div>
+      <div class="cat-card reveal d3">
+        <span class="cat-icon">🌿</span>
+        <div class="cat-name">Health & Wellness</div>
+        <div class="cat-sub">Tracking, monitoring & patient engagement systems</div>
+      </div>
+      <div class="cat-card reveal d4">
+        <span class="cat-icon">📅</span>
+        <div class="cat-name">Booking Apps</div>
+        <div class="cat-sub">Scheduling, reservations & resource management</div>
+      </div>
+      <div class="cat-card reveal d1">
+        <span class="cat-icon">🏢</span>
+        <div class="cat-name">Enterprise Apps</div>
+        <div class="cat-sub">Internal tools, dashboards & operations platforms</div>
+      </div>
+      <div class="cat-card reveal d2">
+        <span class="cat-icon">📚</span>
+        <div class="cat-name">EdTech Apps</div>
+        <div class="cat-sub">Learning platforms, assessment & content delivery</div>
+      </div>
+      <div class="cat-card reveal d3">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-name">Productivity Apps</div>
+        <div class="cat-sub">Task management, collaboration & workflow tools</div>
+      </div>
+      <div class="cat-card reveal d4">
+        <span class="cat-icon">🤖</span>
+        <div class="cat-name">AI-powered Apps</div>
+        <div class="cat-sub">Machine learning integrated into mobile experiences</div>
+      </div>
+      <div class="cat-card reveal d1">
+        <span class="cat-icon">🚀</span>
+        <div class="cat-name">On-demand Apps</div>
+        <div class="cat-sub">Delivery, services & real-time marketplace apps</div>
+      </div>
+      <div class="cat-card reveal d2">
+        <span class="cat-icon">🔗</span>
+        <div class="cat-name">Internal Business</div>
+        <div class="cat-sub">Custom enterprise mobility & process automation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FEATURED WORK
+═══════════════════════════════════════════ -->
+<section class="work section" id="work">
+  <div class="container-wide">
+    <span class="label reveal">Featured Work</span>
+    <h2 class="h2 reveal d1">Products built to <em>be remembered.</em></h2>
+    <p class="body-lg reveal d2" style="margin-top:20px">
+      A selection of mobile products — each one a case study in architecture, design thinking, and measurable impact.
+    </p>
+
+    <div class="work-grid" style="margin-top:72px">
+
+      <!-- Card 1 — wide -->
+      <div class="work-card reveal">
+        <div class="wc-bg wbg-1">
+          <div class="wc-mockup wc-mockup-wide">
+            <div class="wm wm-sm">
+              <div class="wm-inner">
+                <div class="wm-bar s7"></div>
+                <div class="wm-bar s5"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+            <div class="wm wm-lg">
+              <div class="wm-inner">
+                <div class="wm-bar s9"></div>
+                <div class="wm-bar s7"></div>
+                <div class="wm-bar s5"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+            <div class="wm wm-md">
+              <div class="wm-inner">
+                <div class="wm-bar s4"></div>
+                <div class="wm-bar s7"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wc-info">
+          <div class="wc-tag">FinTech · Payments</div>
+          <div class="wc-title">FinFlow — Modern Wallet & Payments</div>
+          <div class="wc-desc">A comprehensive fintech platform enabling seamless peer-to-peer transfers, bill payments, and investment portfolio management with bank-grade security and real-time transaction visibility.</div>
+          <div class="wc-meta">
+            <div class="wc-meta-item">⚡ Flutter</div>
+            <div class="wc-meta-item">🔐 Biometric Auth</div>
+            <div class="wc-meta-item">📊 Real-time Analytics</div>
+            <div class="wc-meta-item">🏦 Payment Gateway Integration</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="work-card reveal d1">
+        <div class="wc-bg wc-bg-tall wbg-2">
+          <div class="wc-mockup">
+            <div class="wm wm-md">
+              <div class="wm-inner">
+                <div class="wm-bar s7"></div>
+                <div class="wm-bar s5"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wc-info">
+          <div class="wc-tag">Health · Wellness</div>
+          <div class="wc-title">CareTrack — Health Monitoring</div>
+          <div class="wc-desc">A personal health companion connecting wearable devices, tracking vitals, and delivering intelligent health insights with a calm, approachable interface.</div>
+          <div class="wc-meta">
+            <div class="wc-meta-item">⚡ Flutter</div>
+            <div class="wc-meta-item">🌿 HealthKit API</div>
+            <div class="wc-meta-item">📱 iOS & Android</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="work-card reveal d2">
+        <div class="wc-bg wc-bg-tall wbg-3">
+          <div class="wc-mockup">
+            <div class="wm wm-md">
+              <div class="wm-inner">
+                <div class="wm-bar s9"></div>
+                <div class="wm-bar s6"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wc-info">
+          <div class="wc-tag">E-commerce · Retail</div>
+          <div class="wc-title">ShopMuse — Premium Commerce</div>
+          <div class="wc-desc">A luxury e-commerce experience built for premium brands, featuring editorial-style product discovery, seamless checkout, and personalized recommendations.</div>
+          <div class="wc-meta">
+            <div class="wc-meta-item">⚡ Flutter</div>
+            <div class="wc-meta-item">🛍 Cart & Checkout</div>
+            <div class="wc-meta-item">🎨 Custom UI</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="work-card reveal d1">
+        <div class="wc-bg wbg-4">
+          <div class="wc-mockup">
+            <div class="wm wm-sm">
+              <div class="wm-inner">
+                <div class="wm-bar s5"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+            <div class="wm wm-md">
+              <div class="wm-inner">
+                <div class="wm-bar s9"></div>
+                <div class="wm-bar s7"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wc-info">
+          <div class="wc-tag">Food · Delivery</div>
+          <div class="wc-title">QuickBite — Food Delivery Experience</div>
+          <div class="wc-desc">An on-demand food delivery platform with real-time order tracking, restaurant discovery, and a frictionless ordering flow designed for repeat use.</div>
+          <div class="wc-meta">
+            <div class="wc-meta-item">⚡ Flutter</div>
+            <div class="wc-meta-item">📍 Live Tracking</div>
+            <div class="wc-meta-item">💳 Payment Integration</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="work-card reveal d2">
+        <div class="wc-bg wbg-5">
+          <div class="wc-mockup">
+            <div class="wm wm-md">
+              <div class="wm-inner">
+                <div class="wm-bar s7"></div>
+                <div class="wm-bar s4"></div>
+                <div class="wm-spacer"></div>
+                <div class="wm-btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wc-info">
+          <div class="wc-tag">Productivity · Enterprise</div>
+          <div class="wc-title">TaskGrid — Team Collaboration</div>
+          <div class="wc-desc">A workplace productivity app enabling distributed teams to manage projects, track deliverables, and communicate without losing context — built for enterprise scale.</div>
+          <div class="wc-meta">
+            <div class="wc-meta-item">⚡ Flutter</div>
+            <div class="wc-meta-item">🔗 REST & WebSocket</div>
+            <div class="wc-meta-item">🏢 Enterprise SSO</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PHILOSOPHY
+═══════════════════════════════════════════ -->
+<section class="philosophy section" id="philosophy">
+  <div class="container">
+    <span class="label reveal">Development Philosophy</span>
+    <h2 class="h2 reveal d1" style="max-width:580px">How <em>great apps</em> are actually built.</h2>
+    <p class="body-lg reveal d2" style="margin-top:20px;margin-bottom:0">
+      These aren't abstract principles. They're the convictions that show up in every architecture decision, every code review, every product conversation.
+    </p>
+
+    <div class="phil-grid" style="margin-top:64px">
+      <div class="phil-card reveal d1">
+        <div class="phil-num">01</div>
+        <div class="phil-title">Product-First Thinking</div>
+        <p class="phil-desc">Code is a means, not an end. Every engineering decision begins with the question: what outcome does this create for the user and the business?</p>
+      </div>
+      <div class="phil-card reveal d2">
+        <div class="phil-num">02</div>
+        <div class="phil-title">Architecture That Lasts</div>
+        <p class="phil-desc">Systems designed to evolve. Clean separation of concerns, modular design, and the discipline to refuse shortcuts that become tomorrow's bottlenecks.</p>
+      </div>
+      <div class="phil-card reveal d3">
+        <div class="phil-num">03</div>
+        <div class="phil-title">Elegant User Experience</div>
+        <p class="phil-desc">Complexity belongs in the code, not the interface. The best apps feel simple because hard problems have been carefully solved out of sight.</p>
+      </div>
+      <div class="phil-card reveal d1">
+        <div class="phil-num">04</div>
+        <div class="phil-title">Speed & Performance</div>
+        <p class="phil-desc">Every millisecond matters. Performance is treated as a feature — optimized from the first commit, not patched in after launch.</p>
+      </div>
+      <div class="phil-card reveal d2">
+        <div class="phil-num">05</div>
+        <div class="phil-title">Built for Scale</div>
+        <p class="phil-desc">Designed for today, engineered for tomorrow. Whether serving hundreds or millions, the foundation holds — because scale was always part of the plan.</p>
+      </div>
+      <div class="phil-card reveal d3">
+        <div class="phil-num">06</div>
+        <div class="phil-title">Business Outcomes</div>
+        <p class="phil-desc">Technology that creates measurable value. Retention, conversion, efficiency — the metrics that matter are tracked, understood, and improved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROCESS
+═══════════════════════════════════════════ -->
+<section class="process section-sm" id="process">
+  <div class="container">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="label reveal">How It Works</span>
+      <h2 class="h2 reveal d1">A process as refined as the <em>product itself.</em></h2>
+    </div>
+    <div class="process-track">
+      <div class="process-step reveal d1">
+        <div class="ps-circle">🔍</div>
+        <div class="ps-num">Step 01</div>
+        <div class="ps-title">Discover</div>
+        <p class="ps-desc">Understanding your users, business context, and what success actually looks like.</p>
+      </div>
+      <div class="process-step reveal d2">
+        <div class="ps-circle">🎯</div>
+        <div class="ps-num">Step 02</div>
+        <div class="ps-title">Define</div>
+        <p class="ps-desc">Translating insights into clear requirements, architecture decisions, and a prioritized roadmap.</p>
+      </div>
+      <div class="process-step reveal d3">
+        <div class="ps-circle">✦</div>
+        <div class="ps-num">Step 03</div>
+        <div class="ps-title">Design</div>
+        <p class="ps-desc">Crafting interfaces that balance clarity, elegance, and the needs of real people under real conditions.</p>
+      </div>
+      <div class="process-step reveal d4">
+        <div class="ps-circle">⚡</div>
+        <div class="ps-num">Step 04</div>
+        <div class="ps-title">Develop</div>
+        <p class="ps-desc">Building with precision and discipline — clean code, rigorous review, and performance from the start.</p>
+      </div>
+      <div class="process-step reveal d5">
+        <div class="ps-circle">🚀</div>
+        <div class="ps-num">Step 05</div>
+        <div class="ps-title">Launch</div>
+        <p class="ps-desc">Deploying with confidence — monitored rollouts, rapid response, and post-launch iteration built in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════════ -->
+<section class="testimonials section" id="testimonials">
+  <div class="container">
+    <div style="text-align:center;max-width:540px;margin:0 auto">
+      <span class="label reveal">Testimonials</span>
+      <h2 class="h2 reveal d1">What people say about working with <em>Monika.</em></h2>
+    </div>
+    <div class="testi-grid">
+
+      <div class="testi-card reveal d1">
+        <div class="testi-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testi-text">"Monika brought a clarity to our mobile architecture that we'd been missing for two years. She didn't just write great code — she made the whole team think about products differently."</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-1">A</div>
+          <div>
+            <div class="testi-name">Arjun Mehta</div>
+            <div class="testi-role">Co-founder, Finverse Technologies</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal d2">
+        <div class="testi-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testi-text">"The Flutter application she delivered was extraordinary — fast, elegant, and architected to last. She understood the user journey better than most product managers I've worked with."</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-2">S</div>
+          <div>
+            <div class="testi-name">Sunita Rao</div>
+            <div class="testi-role">Senior Product Manager, Axis Digital</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal d3">
+        <div class="testi-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testi-text">"We needed someone who could bridge engineering excellence with business outcomes. Monika does this naturally. Our app now handles 10× the load it did before, with half the support tickets."</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-3">R</div>
+          <div>
+            <div class="testi-name">Rahul Desai</div>
+            <div class="testi-role">Head of Digital, Sahyadri Ventures</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════ -->
+<section class="cta-section" id="contact">
+  <div class="cta-glow"></div>
+  <div class="cta-content">
+    <span class="cta-label reveal">Let's Build</span>
+    <h2 class="cta-title reveal d1">Let's build something people <em>love to use.</em></h2>
+    <p class="cta-sub reveal d2">
+      From product concept to polished mobile experience — apps that feel intuitive, scale effortlessly, and stand apart.
+    </p>
+    <div class="cta-btns reveal d3">
+      <a href="mailto:monika.shukla@example.com" class="btn-cta-primary">Start a Project</a>
+      <a href="https://linkedin.com/in/monika-shukla" target="_blank" class="btn-cta-ghost">Connect on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Monika Shukla</div>
+      <div class="footer-tagline">Technical Manager · Mobile App Development</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Navigation</div>
+      <a href="#story">About</a>
+      <a href="#capabilities">Expertise</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Connect</div>
+      <a href="https://linkedin.com/in/monika-shukla" target="_blank">LinkedIn</a>
+      <a href="mailto:monika.shukla@example.com">Email</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Location</div>
+      <span>Pune, Maharashtra</span>
+      <span>India</span>
+      <span style="margin-top:4px">Mahindra Finance</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Monika Shukla. All rights reserved.</div>
+    <div class="footer-copy">Built with intention.</div>
+  </div>
+</footer>
+
+<script>
+/* ─────────────────────────────────────────────
+   CURSOR
+───────────────────────────────────────────── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+});
+(function animate(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animate);
+})();
+document.querySelectorAll('a,button,.cat-card,.work-card,.phil-card,.testi-card,.story-stat').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='60px';ring.style.height='60px'});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='40px';ring.style.height='40px'});
+});
+/* hide on mobile */
+if('ontouchstart' in window){cursor.style.display='none';ring.style.display='none'}
+
+/* ─────────────────────────────────────────────
+   NAV SCROLL
+───────────────────────────────────────────── */
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>60);
+},{ passive:true });
+
+/* ─────────────────────────────────────────────
+   MOBILE MENU
+───────────────────────────────────────────── */
+function toggleMenu(){
+  const menu=document.getElementById('mobileMenu');
+  const ham=document.getElementById('hamburger');
+  const open=menu.classList.toggle('open');
+  const spans=ham.querySelectorAll('span');
+  if(open){
+    spans[0].style.transform='rotate(45deg) translate(4.5px,4.5px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(4.5px,-4.5px)';
+  } else {
+    spans.forEach(s=>{s.style.transform='';s.style.opacity=''});
+  }
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────── */
+const revealEls = document.querySelectorAll('.reveal,.reveal-scale');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+  });
+},{threshold:.12,rootMargin:'0px 0px -60px 0px'});
+revealEls.forEach(el=>io.observe(el));
+
+/* ─────────────────────────────────────────────
+   HERO PARALLAX
+───────────────────────────────────────────── */
+const hero=document.querySelector('.hero');
+const heroContent=document.querySelector('.hero-content');
+const heroDevices=document.querySelector('.hero-devices');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY;
+  if(s<window.innerHeight){
+    heroContent.style.transform=`translateY(${s*.18}px)`;
+    heroContent.style.opacity=1-(s/(window.innerHeight*.65));
+    if(heroDevices){
+      heroDevices.style.transform=`translateX(-50%) translateY(${s*.28}px)`;
+    }
+  }
+},{passive:true});
+
+/* ─────────────────────────────────────────────
+   SMOOTH ACTIVE NAV
+───────────────────────────────────────────── */
+const sections=document.querySelectorAll('section[id],div.trust');
+const navAs=document.querySelectorAll('.nav-links a');
+const sectionObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      navAs.forEach(a=>{
+        a.style.color = a.getAttribute('href')==='#'+id
+          ? 'var(--c-midnight)' : '';
+      });
+    }
+  });
+},{threshold:.4});
+sections.forEach(s=>sectionObserver.observe(s));
+</script>
+</body>
+</html>
